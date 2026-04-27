@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/ethanflaharty/PokedexCLI/internal/pokecache"
 )
 
 func startRepl() {
 	reader := bufio.NewScanner(os.Stdin)
-	cfg := &config{}
+	cfg := &config{
+		cache: pokecache.NewCache(5 * time.Second),
+	}
 	for {
 		fmt.Print("Pokedex > ")
 		reader.Scan()
@@ -50,6 +55,7 @@ type cliCommand struct {
 type config struct {
 	Next     *string
 	Previous *string
+	cache    *pokecache.Cache
 }
 
 func getCommands() map[string]cliCommand {

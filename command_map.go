@@ -14,16 +14,23 @@ func commandMap(cfg *config) error {
 	} else {
 		url = *cfg.Next
 	}
-	res, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
 
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
+	var bodyBytes []byte
+	if cached, ok := cfg.cache.Get(url); ok {
+		bodyBytes = cached
+	} else {
+		res, err := http.Get(url)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+		bodyBytes, err = io.ReadAll(res.Body)
+		if err != nil {
+			return err
+		}
+		cfg.cache.Add(url, bodyBytes)
 	}
+
 	var data locationResponse
 	errUnmarsh := json.Unmarshal(bodyBytes, &data)
 	if errUnmarsh != nil {
