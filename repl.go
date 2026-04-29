@@ -13,7 +13,8 @@ import (
 func startRepl() {
 	reader := bufio.NewScanner(os.Stdin)
 	cfg := &config{
-		cache: pokecache.NewCache(5 * time.Second),
+		cache:   pokecache.NewCache(5 * time.Second),
+		pokedex: map[string]pokemon{},
 	}
 	for {
 		fmt.Print("Pokedex > ")
@@ -58,6 +59,7 @@ type config struct {
 	Previous *string
 	cache    *pokecache.Cache
 	local    *location
+	pokedex  map[string]pokemon
 }
 
 func getCommands() map[string]cliCommand {
@@ -86,6 +88,11 @@ func getCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "Gives a list of Pokemon in a given area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Try to catch a pokemon",
+			callback:    commandCatch,
 		},
 	}
 }

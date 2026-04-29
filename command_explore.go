@@ -10,7 +10,7 @@ import (
 
 func commandExplore(cfg *config, names ...string) error {
 	if len(names) < 1 {
-		return errors.New("you must provide a location name")
+		return errors.New("you must provide a location name\n")
 	}
 	var url string
 	url = "https://pokeapi.co/api/v2/location-area/" + names[0]
@@ -36,7 +36,7 @@ func commandExplore(cfg *config, names ...string) error {
 	if errUnmarsh != nil {
 		return errUnmarsh
 	}
-	fmt.Printf("Exploring %v...", names[0])
+	fmt.Printf("Exploring %v...\n", names[0])
 	fmt.Println("Found Pokemon:")
 	for _, encounter := range data.PokemonEncounters {
 		fmt.Println(encounter.Pokemon.Name)
