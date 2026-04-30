@@ -42,7 +42,7 @@ func commandCatch(cfg *config, names ...string) error {
 	roll := rand.Intn(data.BaseExperience)
 	if roll < threshold {
 		fmt.Printf("%v was caught!\n", names[0])
-		cfg.pokedex["Caught"] = data
+		cfg.pokedex[names[0]] = data
 	} else {
 		fmt.Printf("%v escaped!\n", names[0])
 	}
